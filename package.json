@@ -1,15 +1,13 @@
 {
   "name": "atom-erlang-workbench",
   "main": "./lib/atom-erlang-workbench",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Erlang coding workbench (work in progress)",
-  "keywords": [
-  ],
+  "keywords": [],
   "repository": "https://github.com/CRY-Code/atom-erlang-workbench.git",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
