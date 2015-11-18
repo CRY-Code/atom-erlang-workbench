@@ -35,7 +35,9 @@ module.exports = AtomErlangWorkbench =
     @subscriptions = new CompositeDisposable
 
     # Register command that toggles this view
+    # @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:toggle': => @toggle()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:toggle': => @toggle()
+
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:run_terminal': => TerminalUtils.run_terminal()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:run_eshell': => TerminalUtils.run_eshell()
 
@@ -48,9 +50,12 @@ module.exports = AtomErlangWorkbench =
     atomErlangWorkbenchViewState: @atomErlangWorkbenchView.serialize()
 
   toggle: ->
-    console.log 'AtomErlangWorkbench was toggled!'
-
-    if @modalPanel.isVisible()
-      @modalPanel.hide()
-    else
-      @modalPanel.show()
+    SaveDialog = require('./save-dialog');
+    saveDialog = new SaveDialog();
+    saveDialog.attach();
+    # console.log 'AtomErlangWorkbench was toggled!'
+    #
+    # if @modalPanel.isVisible()
+    #   @modalPanel.hide()
+    # else
+    #   @modalPanel.show()

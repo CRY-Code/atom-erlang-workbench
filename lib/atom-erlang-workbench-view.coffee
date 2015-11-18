@@ -1,5 +1,8 @@
+View = require 'atom-space-pen-views'
+Dialog = require './dialogs/dialog'
+
 module.exports =
-class AtomErlangWorkbenchView
+class AtomErlangWorkbenchView extends View
   constructor: (serializedState) ->
     # Create root element
     @element = document.createElement('div')
