@@ -9,3 +9,9 @@
 # https://atom.io/docs/latest/behind-atom-keymaps-in-depth
 # 'atom-workspace':
   # 'ctrl-alt-o': 'atom-erlang-workbench:toggle'
+'atom-text-editor':
+  'alt-enter': 'autosolution:toggle'
+
+'.autosolution atom-text-editor[mini]':
+  'enter': 'core:confirm'
+  'tab': 'core:confirm'

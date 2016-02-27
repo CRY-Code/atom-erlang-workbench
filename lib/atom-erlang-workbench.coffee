@@ -1,4 +1,6 @@
+{CompositeDisposable, Disposable} = require 'atom'
 AtomErlangWorkbenchView = require './atom-erlang-workbench-view'
+AutosolutionView = require './views/autosolution-view.coffee'
 TerminalUtils = require './terminal-utils.coffee'
 {CompositeDisposable} = require 'atom'
 
@@ -30,6 +32,39 @@ module.exports = AtomErlangWorkbench =
   activate: (state) ->
     @atomErlangWorkbenchView = new AtomErlangWorkbenchView(state.atomErlangWorkbenchViewState)
     @modalPanel = atom.workspace.addModalPanel(item: @atomErlangWorkbenchView.getElement(), visible: false)
+
+
+
+
+    @autosolutionViewsByEditor = new WeakMap
+    @deactivationDisposables = new CompositeDisposable
+
+    @deactivationDisposables.add atom.workspace.observeTextEditors (editor) =>
+      return if editor.mini
+
+      autosolutionView = new AutosolutionView(editor)
+      @autosolutionViewsByEditor.set(editor, autosolutionView)
+
+      disposable = new Disposable => autosolutionView.destroy()
+      @deactivationDisposables.add editor.onDidDestroy => disposable.dispose()
+      @deactivationDisposables.add disposable
+
+    getAutosolutionView = (editorElement) =>
+      @autosolutionViewsByEditor.get(editorElement.getModel())
+
+    @deactivationDisposables.add atom.commands.add 'atom-text-editor:not([mini])',
+      'autosolution:toggle': ->
+        atom.notifications.addInfo('Test out:')        
+        getAutosolutionView(this)?.toggle()
+      'autosolution:next': ->
+        getAutosolutionView(this)?.selectNextItemView()
+      'autosolution:previous': ->
+        getAutosolutionView(this)?.selectPreviousItemView()
+
+
+
+
+
 
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
