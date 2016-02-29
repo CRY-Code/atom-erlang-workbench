@@ -2,8 +2,6 @@
 
 module.exports =
 
-
-
   run_terminal: (filepath) ->
     command = atom.config.get 'atom-erlang-workbench.terminal_command'
     @run(filepath, command)
@@ -15,7 +13,6 @@ module.exports =
   run_rebar_compile: (filepath) ->
     command = atom.config.get 'atom-erlang-workbench.rebar_command'
     @run_buffered(filepath, command, ["compile"])
-
 
 
   run: (filepath, a_command) ->
@@ -36,7 +33,7 @@ module.exports =
         exec_prefix = ''
 
     atom.notifications.addInfo "Erlang workbench run: " + exec_prefix + a_command
-    require('child_process').exec(exec_prefix + a_command, {cwd:  dirpath})
+    require('child_process').exec(exec_prefix + a_command, {cwd: dirpath})
 
 
   run_buffered: (filepath, a_command, a_args) ->
@@ -65,7 +62,7 @@ module.exports =
           run_result.push data#.replace(/(\r\n|\n|\r)/gm,"")
         exit: (code) ->
           exit_result += code
-          atom.notifications.addError "Erlang workbench buffered command result #{run_result}"
+          atom.notifications.addInfo "#{run_result}"
           # parse_erl_module_info_result("#{compile_result}")
           resolve run_result
       process.onWillThrowError ({error,handle}) ->

@@ -17,16 +17,27 @@
           'command': 'atom-erlang-workbench:toggle'
         },
         {
-          'label': 'Run Terminal'
-          'command': 'atom-erlang-workbench:run_terminal'
+          'label': 'Run'
+          'submenu': [
+            {
+              'label': 'Terminal'
+              'command': 'atom-erlang-workbench:run_terminal'
+            },
+            {
+              'label': 'EShell'
+              'command': 'atom-erlang-workbench:run_eshell'
+            }
+          ]
         },
         {
-          'label': 'Run EShell'
-          'command': 'atom-erlang-workbench:run_eshell'
-        },
-        {
-          'label': 'Rebar compile'
-          'command': 'atom-erlang-workbench:run_rebar_compile'
+          'label': 'Rebar'
+          'submenu': [
+            {
+              'label': 'Compile'
+              'command': 'atom-erlang-workbench:run_rebar_compile'
+            }
+          ]
+
         }
       ]
     ]
