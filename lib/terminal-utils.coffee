@@ -65,7 +65,7 @@ module.exports =
           run_result.push data#.replace(/(\r\n|\n|\r)/gm,"")
         exit: (code) ->
           exit_result += code
-          atom.notifications.addError "On exit to run #{run_result}"
+          atom.notifications.addError "Erlang workbench buffered command result #{run_result}"
           # parse_erl_module_info_result("#{compile_result}")
           resolve run_result
       process.onWillThrowError ({error,handle}) ->
