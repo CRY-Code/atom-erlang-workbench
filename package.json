@@ -1,7 +1,7 @@
 {
   "name": "atom-erlang-workbench",
   "main": "./lib/atom-erlang-workbench",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Erlang coding workbench (work in progress)",
   "keywords": [],
   "repository": "https://github.com/CRY-Code/atom-erlang-workbench.git",
