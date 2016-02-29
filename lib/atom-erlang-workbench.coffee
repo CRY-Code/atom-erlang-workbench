@@ -9,12 +9,15 @@ switch require('os').platform()
   when 'darwin'
     default_terminal_command = 'open -a Terminal.app "$PWD"'
     default_eshell_command = 'erl'
+    default_rebar_command = 'rebar'
   when 'win32'
-    default_terminal_command = 'start /D "%cd%" cmd'
-    default_eshell_command = 'start /D "%cd%" erl'
+    default_terminal_command = 'cmd'
+    default_eshell_command = 'erl'
+    default_rebar_command = 'rebar'
   else
     default_terminal_command = 'x-terminal-emulator'
     default_eshell_command = 'erl'
+    default_rebar_command = 'rebar'
 
 module.exports = AtomErlangWorkbench =
   config: {
@@ -24,6 +27,9 @@ module.exports = AtomErlangWorkbench =
     eshell_command:
       type: 'string'
       default: default_eshell_command
+    rebar_command:
+      type: 'string'
+      default: default_rebar_command
   },
   atomErlangWorkbenchView: null
   modalPanel: null
@@ -54,7 +60,7 @@ module.exports = AtomErlangWorkbench =
 
     @deactivationDisposables.add atom.commands.add 'atom-text-editor:not([mini])',
       'autosolution:toggle': ->
-        atom.notifications.addInfo('Test out:')        
+        atom.notifications.addInfo('Test out:')
         getAutosolutionView(this)?.toggle()
       'autosolution:next': ->
         getAutosolutionView(this)?.selectNextItemView()
@@ -75,6 +81,7 @@ module.exports = AtomErlangWorkbench =
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:run_terminal': => TerminalUtils.run_terminal()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:run_eshell': => TerminalUtils.run_eshell()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:run_rebar_compile': => TerminalUtils.run_rebar_compile()
 
   deactivate: ->
     @modalPanel.destroy()

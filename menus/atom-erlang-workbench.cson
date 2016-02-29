@@ -23,6 +23,10 @@
         {
           'label': 'Run EShell'
           'command': 'atom-erlang-workbench:run_eshell'
+        },
+        {
+          'label': 'Rebar compile'
+          'command': 'atom-erlang-workbench:run_rebar_compile'
         }
       ]
     ]
