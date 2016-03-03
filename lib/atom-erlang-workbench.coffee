@@ -2,6 +2,7 @@
 AtomErlangWorkbenchView = require './atom-erlang-workbench-view'
 AutosolutionView = require './views/autosolution-view.coffee'
 TerminalUtils = require './terminal-utils.coffee'
+Project = require './project.coffee'
 {CompositeDisposable} = require 'atom'
 
 
@@ -16,7 +17,7 @@ switch require('os').platform()
     default_rebar_command = 'rebar'
   else
     default_terminal_command = 'x-terminal-emulator'
-    default_eshell_command = 'erl'
+    default_eshell_command = 'x-terminal-emulator -e erl'
     default_rebar_command = 'rebar'
 
 module.exports = AtomErlangWorkbench =
@@ -34,8 +35,13 @@ module.exports = AtomErlangWorkbench =
   atomErlangWorkbenchView: null
   modalPanel: null
   subscriptions: null
+  p : null
 
   activate: (state) ->
+
+    @p = new Project()
+    @p.initialize()
+
     @atomErlangWorkbenchView = new AtomErlangWorkbenchView(state.atomErlangWorkbenchViewState)
     @modalPanel = atom.workspace.addModalPanel(item: @atomErlangWorkbenchView.getElement(), visible: false)
 
@@ -76,12 +82,17 @@ module.exports = AtomErlangWorkbench =
     @subscriptions = new CompositeDisposable
 
     # Register command that toggles this view
-    # @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:toggle': => @toggle()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:toggle': => @toggle()
-
-    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:run_terminal': => TerminalUtils.run_terminal()
-    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:run_eshell': => TerminalUtils.run_eshell()
-    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:run_rebar_compile': => TerminalUtils.run_rebar_compile()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:test': => @test()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:run_terminal': =>
+      TerminalUtils.run(null, atom.config.get('atom-erlang-workbench.terminal_command'))
+    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:run_eshell': =>
+      TerminalUtils.run(null, atom.config.get('atom-erlang-workbench.eshell_command'))
+    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:run_rebar_compile': =>
+      TerminalUtils.spawn(null, atom.config.get('atom-erlang-workbench.rebar_command'), ["compile"])
+    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-erlang-workbench:compile': =>
+      r = TerminalUtils.spawn(null, 'erlc', ["-I include -o ebin src/*.erl"])
+      atom.notifications.addError "Failed to run #{r}"
 
   deactivate: ->
     @modalPanel.destroy()
@@ -101,3 +112,8 @@ module.exports = AtomErlangWorkbench =
     #   @modalPanel.hide()
     # else
     #   @modalPanel.show()
+  test: ->
+    atom.notifications.addInfo "Test"
+    for i in @p.rebar_templates
+      atom.notifications.addInfo i.name + ", " + i.variable
+    # atom.notifications.addError @p.rebar_templates.toString()

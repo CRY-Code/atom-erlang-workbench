@@ -1,12 +1,12 @@
-{$, TextEditorView, View} = require 'atom-space-pen-views'
+{$, TextEditorView, View, SelectListView} = require 'atom-space-pen-views'
 
 MenuView = require './views/menu-view'
 
 module.exports =
-class Dialog extends View
+class Dialog extends SelectListView
   @content: ({prompt} = {}) ->
     @div class: 'project-manager-dialog', =>
-      @subview 'menuView', new MenuView()
+      # @subview 'menuView', new MenuView()
       @label prompt, class: 'icon', outlet: 'promptText'
       @subview 'miniEditor', new TextEditorView(mini: true)
       @div class: 'error-message text-error', outlet: 'errorMessage'

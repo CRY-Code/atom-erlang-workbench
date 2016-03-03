@@ -17,6 +17,10 @@
           'command': 'atom-erlang-workbench:toggle'
         },
         {
+          'label': 'Test'
+          'command': 'atom-erlang-workbench:test'
+        },
+        {
           'label': 'Run'
           'submenu': [
             {
